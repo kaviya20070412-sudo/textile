@@ -530,6 +530,138 @@
     gap:10px;
   }
 
+  /* ---------- ORDER MODAL ---------- */
+  .nav-order-btn{
+    padding:10px 20px;
+    font-size:.8rem;
+  }
+  .order-fab{
+    position:fixed;
+    bottom:26px;
+    right:26px;
+    z-index:150;
+    box-shadow:0 14px 30px -10px rgba(28,46,70,.55);
+  }
+  .modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(28,46,70,.55);
+    backdrop-filter:blur(3px);
+    z-index:200;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .28s ease, visibility .28s ease;
+  }
+  .modal-overlay.active{
+    opacity:1;
+    visibility:visible;
+  }
+  .modal-box{
+    background:var(--thread-white);
+    width:100%;
+    max-width:560px;
+    max-height:88vh;
+    overflow-y:auto;
+    border-radius:2px;
+    position:relative;
+    padding:44px 40px 40px;
+    transform:translateY(18px);
+    transition:transform .28s ease;
+    box-shadow:0 40px 80px -30px rgba(28,46,70,.5);
+  }
+  .modal-overlay.active .modal-box{
+    transform:translateY(0);
+  }
+  .modal-close{
+    position:absolute;
+    top:18px;
+    right:18px;
+    width:34px;
+    height:34px;
+    border:1px solid var(--line);
+    background:transparent;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    font-size:1.1rem;
+    line-height:1;
+    color:var(--charcoal);
+    transition:background .2s ease, transform .2s ease;
+  }
+  .modal-close:hover{
+    background:var(--cotton-dim);
+    transform:rotate(90deg);
+  }
+  .modal-box h3{
+    font-family:var(--serif);
+    font-weight:450;
+    font-size:1.5rem;
+    margin-bottom:8px;
+  }
+  .modal-box .modal-sub{
+    font-size:.88rem;
+    color:rgba(33,29,26,.65);
+    font-weight:300;
+    margin-bottom:30px;
+    line-height:1.5;
+  }
+  .order-form .field-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+  }
+  .order-form .field{margin-bottom:18px;}
+  .order-form .field:last-of-type{margin-bottom:0;}
+  .order-success{
+    display:none;
+    text-align:center;
+    padding:30px 10px 10px;
+  }
+  .order-success.active{display:block;}
+  .order-success .check{
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    background:var(--indigo-deep);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 22px;
+  }
+  .order-success h3{
+    font-family:var(--serif);
+    font-size:1.4rem;
+    font-weight:450;
+    margin-bottom:10px;
+  }
+  .order-success p{
+    font-size:.9rem;
+    color:rgba(33,29,26,.65);
+    font-weight:300;
+    margin-bottom:24px;
+  }
+  .card-order-link{
+    display:inline-block;
+    margin-top:2px;
+    font-family:var(--mono);
+    font-size:.7rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--rust);
+    text-decoration:none;
+    border-bottom:1px solid var(--rust);
+    padding-bottom:2px;
+    background:none;
+    border-top:none;border-left:none;border-right:none;
+    cursor:pointer;
+  }
+
   /* ---------- RESPONSIVE ---------- */
   @media (max-width: 900px){
     .about-grid, .visit-grid{grid-template-columns:1fr;}
@@ -545,6 +677,9 @@
     .stats-grid{grid-template-columns:1fr;}
     .footer-cols{gap:36px;}
     .footer-top{flex-direction:column;}
+    .order-form .field-row{grid-template-columns:1fr;}
+    .modal-box{padding:34px 22px 30px;}
+    .order-fab{right:16px; bottom:16px; padding:12px 18px; font-size:.78rem;}
   }
 </style>
 </head>
@@ -554,12 +689,15 @@
   <div class="wrap">
     <nav>
       <a href="#top" class="logo">NŪL <small>Coimbatore</small></a>
-      <ul class="navlinks">
-        <li><a href="#about">About</a></li>
-        <li><a href="#process">Process</a></li>
-        <li><a href="#collections">Collections</a></li>
-        <li><a href="#visit">Visit</a></li>
-      </ul>
+      <div style="display:flex; align-items:center; gap:36px;">
+        <ul class="navlinks">
+          <li><a href="#about">About</a></li>
+          <li><a href="#process">Process</a></li>
+          <li><a href="#collections">Collections</a></li>
+          <li><a href="#visit">Visit</a></li>
+        </ul>
+        <button type="button" class="btn btn-primary nav-order-btn" data-open-order>Order Now</button>
+      </div>
     </nav>
   </div>
 </header>
@@ -595,7 +733,8 @@
     <h1 class="hero-title">Cloth remembers <em>the hand</em> that made it.</h1>
     <p class="hero-sub">NŪL is a small handloom studio working with cotton, natural dye, and pit looms passed down through three generations of weaving families in the Kongu belt. Every length is thrown by hand, thread by thread.</p>
     <div class="hero-cta">
-      <a href="#collections" class="btn btn-primary">Explore the collections</a>
+      <button type="button" class="btn btn-primary" data-open-order>Order Now</button>
+      <a href="#collections" class="btn btn-ghost">Explore the collections</a>
       <a href="#process" class="btn btn-ghost">See how it's woven</a>
     </div>
   </div>
@@ -684,6 +823,7 @@
           <h3>Madder Cotton Sarees</h3>
           <p>Handwoven kora cotton, dyed in madder root, with a plain contrast border.</p>
           <div class="card-meta"><span>COTTON</span><span>5.5M</span></div>
+          <button type="button" class="card-order-link" data-open-order data-product="Madder Cotton Saree">Order this →</button>
         </div>
       </div>
       <div class="card">
@@ -692,6 +832,7 @@
           <h3>Indigo Stripe Stoles</h3>
           <p>Fine indigo and undyed cotton stripes, woven on the narrow loom.</p>
           <div class="card-meta"><span>COTTON</span><span>2.2M</span></div>
+          <button type="button" class="card-order-link" data-open-order data-product="Indigo Stripe Stole">Order this →</button>
         </div>
       </div>
       <div class="card">
@@ -700,6 +841,7 @@
           <h3>Turmeric Check Yardage</h3>
           <p>Sold by the metre — a warm gingham weave in natural turmeric dye.</p>
           <div class="card-meta"><span>COTTON</span><span>PER METRE</span></div>
+          <button type="button" class="card-order-link" data-open-order data-product="Turmeric Check Yardage">Order this →</button>
         </div>
       </div>
       <div class="card">
@@ -708,6 +850,7 @@
           <h3>Charcoal Ikat Cushions</h3>
           <p>Off-loom cuttings from larger runs, finished into cushion covers.</p>
           <div class="card-meta"><span>COTTON-SILK</span><span>45×45CM</span></div>
+          <button type="button" class="card-order-link" data-open-order data-product="Charcoal Ikat Cushions">Order this →</button>
         </div>
       </div>
     </div>
@@ -801,6 +944,55 @@
   </div>
 </footer>
 
+<div class="modal-overlay" id="orderOverlay" aria-hidden="true">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="orderModalTitle">
+    <button type="button" class="modal-close" id="orderClose" aria-label="Close order form">&times;</button>
+
+    <div id="orderFormView">
+      <h3 id="orderModalTitle">Place an order</h3>
+      <p class="modal-sub">Tell us what you'd like and where to send it. We'll confirm availability and total by phone or email before weaving or packing begins.</p>
+      <form class="order-form" id="orderForm">
+        <div class="field">
+          <label for="orderName">Customer Name</label>
+          <input type="text" id="orderName" required>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="orderPhone">Phone Number</label>
+            <input type="tel" id="orderPhone" required>
+          </div>
+          <div class="field">
+            <label for="orderQuantity">Quantity</label>
+            <input type="number" id="orderQuantity" min="1" value="1" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="orderProduct">Product Name</label>
+          <input type="text" id="orderProduct" placeholder="e.g. Madder Cotton Saree" required>
+        </div>
+        <div class="field">
+          <label for="orderAddress">Address</label>
+          <textarea id="orderAddress" rows="3" required></textarea>
+        </div>
+        <div class="field">
+          <label for="orderNotes">Additional Notes</label>
+          <textarea id="orderNotes" rows="3" placeholder="Colour preference, border style, delivery timeline..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="align-self:flex-start; margin-top:6px;">Place Order</button>
+      </form>
+    </div>
+
+    <div class="order-success" id="orderSuccessView">
+      <div class="check">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 12.5L9.5 18L20 6" stroke="#f6f1e3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h3>Order placed successfully</h3>
+      <p>Thank you — we've noted your order and will reach out shortly to confirm details and delivery.</p>
+      <button type="button" class="btn btn-ghost" style="border-color:var(--line); color:var(--charcoal);" id="orderAnother">Place another order</button>
+    </div>
+  </div>
+</div>
+
 <script>
   const header = document.getElementById('siteHeader');
   window.addEventListener('scroll', () => {
@@ -813,6 +1005,64 @@
     e.preventDefault();
     msg.textContent = "Message received — we'll write back within a couple of days.";
     form.reset();
+  });
+
+  /* ---------- Order modal ---------- */
+  const orderOverlay = document.getElementById('orderOverlay');
+  const orderFormView = document.getElementById('orderFormView');
+  const orderSuccessView = document.getElementById('orderSuccessView');
+  const orderForm = document.getElementById('orderForm');
+  const orderProductInput = document.getElementById('orderProduct');
+  const orderClose = document.getElementById('orderClose');
+  const orderAnother = document.getElementById('orderAnother');
+  let lastFocusedEl = null;
+
+  function openOrderModal(productName){
+    lastFocusedEl = document.activeElement;
+    orderFormView.style.display = 'block';
+    orderSuccessView.classList.remove('active');
+    if (productName) { orderProductInput.value = productName; }
+    orderOverlay.classList.add('active');
+    orderOverlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    const nameField = document.getElementById('orderName');
+    if (nameField) nameField.focus();
+  }
+
+  function closeOrderModal(){
+    orderOverlay.classList.remove('active');
+    orderOverlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (lastFocusedEl) lastFocusedEl.focus();
+  }
+
+  document.querySelectorAll('[data-open-order]').forEach((el) => {
+    el.addEventListener('click', () => {
+      openOrderModal(el.getAttribute('data-product') || '');
+    });
+  });
+
+  orderClose.addEventListener('click', closeOrderModal);
+
+  orderOverlay.addEventListener('click', (e) => {
+    if (e.target === orderOverlay) closeOrderModal();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && orderOverlay.classList.contains('active')) closeOrderModal();
+  });
+
+  orderForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    orderFormView.style.display = 'none';
+    orderSuccessView.classList.add('active');
+    orderForm.reset();
+  });
+
+  orderAnother.addEventListener('click', () => {
+    orderSuccessView.classList.remove('active');
+    orderFormView.style.display = 'block';
+    document.getElementById('orderName').focus();
   });
 </script>
 
