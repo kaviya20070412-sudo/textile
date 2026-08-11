@@ -993,7 +993,17 @@
   </div>
 </div>
 
-<script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+  const SUPABASE_URL = 'https://lrexqjkjfpzzswwfogyq.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_OZuwiFc_JRrmCIQpUS7xnA_hiYMdQJx';
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
   const header = document.getElementById('siteHeader');
   window.addEventListener('scroll', () => {
     header.classList.toggle('solid', window.scrollY > 40);
@@ -1051,12 +1061,41 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && orderOverlay.classList.contains('active')) closeOrderModal();
   });
-
-  orderForm.addEventListener('submit', (e) => {
+  orderForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+
+    const customerName = document.getElementById('orderName').value;
+    const phone = document.getElementById('orderPhone').value;
+    const quantity = document.getElementById('orderQuantity').value;
+    const productName = document.getElementById('orderProduct').value;
+    const address = document.getElementById('orderAddress').value;
+    const notes = document.getElementById('orderNotes').value;
+
+    const { data, error } = await supabaseClient
+        .from('orders')
+        .insert([
+            {
+                customer_name: customerName,
+                phone: phone,
+                quantity: Number(quantity),
+                product_name: productName,
+                address: address,
+                notes: notes
+            }
+        ]);
+
+    if (error) {
+        console.error(error);
+        alert('Order failed. Please try again.');
+        return;
+    }
+
     orderFormView.style.display = 'none';
     orderSuccessView.classList.add('active');
     orderForm.reset();
+});
+
+ 
   });
 
   orderAnother.addEventListener('click', () => {
