@@ -1038,7 +1038,11 @@ const supabaseClient = window.supabase.createClient(
     const nameField = document.getElementById('orderName');
     if (nameField) nameField.focus();
   }
-
+document.querySelectorAll('[data-open-order]').forEach(button => {
+    button.addEventListener('click', () => {
+        openOrderModal();
+    });
+});
   function closeOrderModal(){
     orderOverlay.classList.remove('active');
     orderOverlay.setAttribute('aria-hidden', 'true');
@@ -1046,11 +1050,7 @@ const supabaseClient = window.supabase.createClient(
     if (lastFocusedEl) lastFocusedEl.focus();
   }
 
-  document.querySelectorAll('[data-open-order]').forEach((el) => {
-    el.addEventListener('click', () => {
-      openOrderModal(el.getAttribute('data-product') || '');
-    });
-  });
+  
 
   orderClose.addEventListener('click', closeOrderModal);
 
@@ -1096,13 +1096,17 @@ const supabaseClient = window.supabase.createClient(
 });
 
  
-  });
 
   orderAnother.addEventListener('click', () => {
     orderSuccessView.classList.remove('active');
     orderFormView.style.display = 'block';
     document.getElementById('orderName').focus();
   });
+  document.querySelectorAll('[data-open-order]').forEach(button => {
+    button.addEventListener('click', () => {
+        openOrderModal();
+    });
+});
 </script>
 
 </body>
