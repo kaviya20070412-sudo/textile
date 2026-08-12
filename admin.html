@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Orders</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 30px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background: #222;
+      color: white;
+    }
+
+    .status {
+      padding: 6px 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>📦 Order Dashboard</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Customer</th>
+        <th>Phone</th>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Address</th>
+        <th>Notes</th>
+        <th>Status</th>
+        <th>Created At</th>
+      </tr>
+    </thead>
+
+    <tbody id="ordersTable">
+      <tr>
+        <td colspan="8">Loading orders...</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const SUPABASE_URL = "https://lrexqjkjfpzzswwfogyq.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_OZuwiFc_JRrmCIQpUS7xnA_hiYMdQJx";
+
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
+    async function loadOrders() {
+
+      const { data, error } = await supabaseClient
+        .from("orders")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error(error);
+        document.getElementById("ordersTable").innerHTML =
+          `<tr><td colspan="8">Error loading orders</td></tr>`;
+        return;
+      }
+
+      const table = document.getElementById("ordersTable");
+
+      table.innerHTML = "";
+
+      data.forEach(order => {
+
+        table.innerHTML += `
+          <tr>
+            <td>${order.customer_name || ""}</td>
+            <td>${order.phone || ""}</td>
+            <td>${order.product_name || ""}</td>
+            <td>${order.quantity || ""}</td>
+            <td>${order.address || ""}</td>
+            <td>${order.notes || ""}</td>
+            <td>${order.status || "Pending"}</td>
+            <td>${order.created_at || ""}</td>
+          </tr>
+        `;
+
+      });
+    }
+
+    loadOrders();
+  </script>
+
+</body>
+</html>
