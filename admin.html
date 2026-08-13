@@ -2,8 +2,9 @@
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
   // Keep using your existing publishable (anon) key — never service_role in frontend
-  const SUPABASE_URL = 'YOUR_EXISTING_URL';
-  const SUPABASE_ANON_KEY = 'YOUR_EXISTING_ANON_KEY';
+  const SUPABASE_URL = 'https://lrexqjkjfpzzswwfogyq.supabase.co';
+
+  const SUPABASE_ANON_KEY = 'sb_publishable_OZuwiFc_JRrmCIQpUS7xnA_hiYMdQJx';
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   async function loadOrders() {
